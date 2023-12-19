@@ -58,6 +58,7 @@ public class SecurityConfig  {
         //요청 URL별 접근 제한
         http.authorizeHttpRequests(
                 authorize->{
+                    authorize.requestMatchers("/js/**","/css/**","/images/**").permitAll();
                     authorize.requestMatchers("/","/login").permitAll();
                     authorize.requestMatchers("/join").hasRole("ANONYMOUS");
                     authorize.requestMatchers("/user").hasRole("USER"); // ROLE_USER
