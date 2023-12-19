@@ -19,6 +19,7 @@ import java.net.Authenticator;
 
 @Controller
 @Slf4j
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -28,15 +29,10 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
 
-    @GetMapping("/login")
-    public void login(){
-        log.info("GET /login...");
-    }
 
-
-    @GetMapping("/user")
+    @GetMapping("/myinfo")
     public void user(Authentication authentication , Model model){
-        log.info("GET /user...Authentication : " + authentication);
+        log.info("GET /user/myinfo...Authentication : " + authentication);
         log.info("username : " + authentication.getName());
         log.info("principal : " + authentication.getPrincipal());
         log.info("authorities : " + authentication.getAuthorities());
@@ -46,21 +42,7 @@ public class UserController {
         model.addAttribute("authentication",authentication);
 
     }
-    @GetMapping("/member")
-    public void member(){
-        log.info("GET /member");
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-        log.info("GET /member.....Authentication : " + authentication);
-        log.info("username : " + authentication.getName());
-        log.info("principal : " + authentication.getPrincipal());
-        log.info("authorities : " + authentication.getAuthorities());
-        log.info("details :  " +authentication.getDetails());
-        log.info("credentials : " + authentication.getCredentials());
-    }
-    @GetMapping("/admin")
-    public void admin(){
-        log.info("GET /admin");
-    }
+
 
 
     @GetMapping("/join")
@@ -72,7 +54,6 @@ public class UserController {
         log.info("POST /join...dto " + dto);
         //파라미터 받기
         //입력값 검증(유효성체크)
-
         //서비스 실행
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         boolean isJoin =  userService.memberJoin(dto);
