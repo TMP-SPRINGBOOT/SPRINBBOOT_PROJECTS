@@ -58,7 +58,7 @@
               function(response){
 
                 console.log(response);
-                axios.post("/user/certification",null,{params :{"is_auth_join" : response.success,"auth_value":response.imp_uid}})
+                axios.post("/user/certification",null,{ params :{"is_auth_join" : response.success,"auth_value":response.imp_uid }})
                 .then(resp=>{
                     console.log("local msg ",resp);
                 })

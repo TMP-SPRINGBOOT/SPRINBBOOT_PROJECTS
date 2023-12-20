@@ -69,7 +69,7 @@ public class UserController {
 
     @PostMapping("/certification")
     public void certification_post(
-            @RequestBody String is_auth_join, @RequestBody String auth_value
+            @RequestParam String is_auth_join, @RequestParam String auth_value
             ){
         log.info("POST /user/certification.." + is_auth_join+","+auth_value);
     }
