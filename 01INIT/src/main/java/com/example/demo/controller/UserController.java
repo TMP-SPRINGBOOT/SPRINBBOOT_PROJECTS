@@ -11,9 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.Authenticator;
 
@@ -66,6 +64,18 @@ public class UserController {
 
     }
 
+    @GetMapping("/certification")
+    public void certification(){log.info("GET /user/certification");}
 
+    @PostMapping("/certification")
+    public void certification_post(
+            @RequestBody String is_auth_join, @RequestBody String auth_value
+            ){
+        log.info("POST /user/certification.." + is_auth_join+","+auth_value);
+    }
 
+    @GetMapping("/findId")
+    public void findId(){log.info("GET /user/findId");}
+    @GetMapping("/findPw")
+    public void findPw(){log.info("GET /user/findPw");}
 }

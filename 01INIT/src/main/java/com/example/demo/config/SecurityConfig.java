@@ -59,11 +59,9 @@ public class SecurityConfig  {
         http.authorizeHttpRequests(
                 authorize->{
                     authorize.requestMatchers("/js/**","/css/**","/images/**","/templates").permitAll();
-                    authorize.requestMatchers("/","/login").permitAll();
+                    authorize.requestMatchers("/","/login","/user/**").permitAll();
                     authorize.requestMatchers("/join").hasRole("ANONYMOUS");
-                    authorize.requestMatchers("/user").hasRole("USER"); // ROLE_USER
-                    authorize.requestMatchers("/member").hasRole("MEMBER"); // ROLE_MEMBER
-                    authorize.requestMatchers("/admin").hasRole("ADMIN"); // ROLE_ADMIN
+
                     authorize.anyRequest().authenticated();
                 }
         );
