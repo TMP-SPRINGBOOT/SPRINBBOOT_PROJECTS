@@ -3,29 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <th:block th:insert="~{fragments/head :: headCdns}"   />
+
+    <!-- Common css   -->
+    <link href="css/common.css"  rel="stylesheet">
+
 </head>
 <body>
 
-<h1>LOGIN PAGE</h1>
-<form action="/login" method="post">
-    USERNAME : <input name="username" /> <br/>
-    PASSWORD : <input name="password" type="password" /> <br/>
-    <div>
-        <div>
-            <input type="checkbox" name="remember-me"  id="rememberME" />
-            <label  for="rememberME" >로그인 상태를 유지</label>
+
+<div class="wrapper">
+    <header>
+        <div class="top-header">
+            <span class="material-symbols-outlined">home</span>
         </div>
-    </div>
-    <input type="submit" />
-    <div th:text="${param.error}"></div>
-</form>
-<a href="/user/join">회원가입</a> <br/>
-<a href="/oauth2/authorization/kakao">카카오 로그인</a><br/>
-<a href="/oauth2/authorization/naver">네이버 로그인</a><br/>
-<a href="/oauth2/authorization/google">구글 로그인</a><br/>
+        <nav>
+
+        </nav>
+    </header>
+    <main>
+        <section>
+            <div style="text-align:center;margin-bottom:50px;">
+                <h1><span class="material-symbols-outlined" style="font-size:4rem;">login</span></h1>
+            </div>
+            <form action="/login" method="post">
+                <div>
+                    <label  class="form-label">USERNAME</label>
+                    <input name="username" class="form-control"  /> <br/>
+                </div>
+                <div>
+                    <label  class="form-label">PASSWORD</label>
+                    <input name="password" type="password"  class="form-control"  /> <br/>
+                </div>
+                <div>
+                    <div>
+                        <input type="checkbox" name="remember-me"  id="rememberME" />
+                        <label  for="rememberME" >로그인 상태를 유지</label>
+                    </div>
+                </div>
+                <div>
+                    <input type="submit" />
+                </div>
+            </form>
+            <a href="/user/join">회원가입</a> <br/>
+            <a href="/oauth2/authorization/kakao">카카오 로그인</a><br/>
+            <a href="/oauth2/authorization/naver">네이버 로그인</a><br/>
+            <a href="/oauth2/authorization/google">구글 로그인</a><br/>
+
+            <div th:text="${param.error}"></div>
+        </section>
+    </main>
+    <footer>
+    </footer>
+</div>
 
 
-<script src="/js/common.js"></script>
+
+<!-- Axios JS   -->
+
+<!-- JS  -->
+<script src="js/common.js"></script>
+
 </body>
 </html>
 
