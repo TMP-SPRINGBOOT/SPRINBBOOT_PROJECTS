@@ -4,6 +4,7 @@ import com.example.demo.domain.dto.CertificationDto;
 import com.example.demo.domain.dto.UserDto;
 import com.example.demo.domain.service.UserService;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
@@ -18,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Controller
 @Slf4j
@@ -69,14 +71,26 @@ public class UserController {
     }
 
     @GetMapping("/certification")
-    public void certification(){log.info("GET /user/certification");}
+    public String certification(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        log.info("GET /user/certification");
+
+        if(request.getCookies() !=null) {
+            boolean isExisted = Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals("importAuth")).findFirst()
+                    .isEmpty();
+            if (!isExisted) {
+                response.sendRedirect("/user/join");
+                return null;
+            }
+        }
+        return "user/certification";
+    }
 
     @PostMapping(value = "/certification",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JSONObject>  certification_post(@RequestBody CertificationDto params, HttpServletResponse response) throws IOException {
         log.info("POST /user/certification.." + params);
         //쿠키로 본인인증 완료값을 전달!
         Cookie authCookie = new Cookie("importAuth","true");
-        authCookie.setMaxAge(60);
+        authCookie.setMaxAge(60*15); //15분동안 유지
         authCookie.setPath("/");
         response.addCookie(authCookie);
 
