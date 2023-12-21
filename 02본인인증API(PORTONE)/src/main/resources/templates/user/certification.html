@@ -64,6 +64,10 @@
                 axios.post("/user/certification",params,headers)
                 .then(resp=>{
                     console.log("local msg ",resp);
+                    if(resp.data.success)
+                            location.href='/user/join'; //서버에서 정상적으로 인증 확인 한경우 페이지 이동 GET /user/join
+                    else
+                        alert('본인인증을 실패했습니다'); //서버에서 false 준경우 alert창을 띄움..
                 })
                 .catch(error=>{console.log("local msg ",error);});
 

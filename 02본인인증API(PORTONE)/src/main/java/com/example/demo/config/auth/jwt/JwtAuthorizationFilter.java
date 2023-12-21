@@ -40,19 +40,63 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain chain
     ) throws IOException, ServletException, IOException {
+
+
         System.out.println("[JWTAUTHORIZATIONFILTER] doFilterInternal...");
 
         String token = null;
         try {
-            // cookie 에서 JWT token을 가져옵니다.
-            token = Arrays.stream(request.getCookies())
-                    .filter(cookie -> cookie.getName().equals(JwtProperties.COOKIE_NAME)).findFirst()
-                    .map(cookie -> cookie.getValue())
-                    .orElse(null);
+
+
+            String importAuth=null;
+            // /user/join 으로 GET 에 한에서 적용
+
+            if(request.getRequestURI().equals("/user/join")){
+                System.out.println(request.getRequestURI());
+                Cookie[] cookies =  request.getCookies();
+
+                if(cookies!=null){
+                    importAuth= Arrays.stream(cookies).filter(co->co.getName().equals("importAuth")).findFirst()
+                            .map(co->co.getValue())
+                            .orElse(null);
+                    System.out.println("[JWTAUTHORIZATIONFILTER] GET /user/join importAuth Cookie value : " + importAuth);
+
+                    if(importAuth==null)
+                        new Exception("/user/join 에 필요한 쿠키가 없습니다..");
+                    else{
+
+                        // cookie 에서 JWT token을 가져옵니다.
+                        token = Arrays.stream(request.getCookies())
+                                .filter(c -> c.getName().equals(JwtProperties.COOKIE_NAME)).findFirst()
+                                .map(c -> c.getValue())
+                                .orElse(null);
+
+                    }
+                }
+                else{
+
+                    if(cookies!=null) {
+                        // cookie 에서 JWT token을 가져옵니다.
+                        token = Arrays.stream(request.getCookies())
+                                .filter(c -> c.getName().equals(JwtProperties.COOKIE_NAME)).findFirst()
+                                .map(c -> c.getValue())
+                                .orElse(null);
+                    }
+
+                }
+
+            }
+
+
+
+
+
 
         } catch (Exception ignored) {
 
+            ignored.printStackTrace();
         }
+
         if (token != null) {
             try {
                 if(jwtTokenProvider.validateToken(token)) {
