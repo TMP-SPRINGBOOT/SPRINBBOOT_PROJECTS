@@ -7,6 +7,7 @@ import com.example.demo.properties.EmailAuthProperties;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Arrays;
+
+import static java.rmi.server.LogStream.log;
 
 @Controller
 @Slf4j
@@ -40,12 +45,12 @@ public class UserController {
 
     @GetMapping(value = "/myinfo" )
     public void user(Authentication authentication , Model model){
-        log.info("GET /user/myinfo...Authentication : " + authentication);
-        log.info("username : " + authentication.getName());
-        log.info("principal : " + authentication.getPrincipal());
-        log.info("authorities : " + authentication.getAuthorities());
-        log.info("details :  " +authentication.getDetails());
-        log.info("credentials : " + authentication.getCredentials());
+        UserController.log.info("GET /user/myinfo...Authentication : " + authentication);
+        UserController.log.info("username : " + authentication.getName());
+        UserController.log.info("principal : " + authentication.getPrincipal());
+        UserController.log.info("authorities : " + authentication.getAuthorities());
+        UserController.log.info("details :  " +authentication.getDetails());
+        UserController.log.info("credentials : " + authentication.getCredentials());
 
         model.addAttribute("authentication",authentication);
 
@@ -55,13 +60,23 @@ public class UserController {
 
     @GetMapping("/join")
     public void join(){
-        log.info("GET /join");
+        UserController.log.info("GET /join");
     }
     @PostMapping("/join")
-    public String join_post(UserDto dto){
-        log.info("POST /join...dto " + dto);
+    public String join_post(@Valid UserDto dto, BindingResult bindingResult,Model model){
+        UserController.log.info("POST /join...dto " + dto);
         //파라미터 받기
+
         //입력값 검증(유효성체크)
+        //System.out.println(bindingResult);
+        if(bindingResult.hasFieldErrors()){
+            for(FieldError error :bindingResult.getFieldErrors()){
+                log.info(error.getField() +" : " + error.getDefaultMessage());
+                model.addAttribute(error.getField(),error.getDefaultMessage());
+            }
+            return "user/join";
+        }
+
         //서비스 실행
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         boolean isJoin =  userService.memberJoin(dto);
@@ -76,7 +91,7 @@ public class UserController {
 
     @GetMapping("/certification")
     public String certification(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        log.info("GET /user/certification");
+        UserController.log.info("GET /user/certification");
 
         if(request.getCookies() !=null) {
             boolean isExisted = Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals("importAuth")).findFirst()
@@ -92,19 +107,21 @@ public class UserController {
 
 
     @GetMapping("/findId")
-    public void findId(){log.info("GET /user/findId");}
+    public void findId(){
+        UserController.log.info("GET /user/findId");}
     @GetMapping("/findPw")
-    public void findPw(){log.info("GET /user/findPw");}
+    public void findPw(){
+        UserController.log.info("GET /user/findPw");}
 
 
 
     //---------------------
     @PostMapping(value = "/certification",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JSONObject>  certification_post(@RequestBody CertificationDto params, HttpServletResponse response) throws IOException {
-        log.info("POST /user/certification.." + params);
+        UserController.log.info("POST /user/certification.." + params);
         //쿠키로 본인인증 완료값을 전달!
         Cookie authCookie = new Cookie("importAuth","true");
-        authCookie.setMaxAge(60*15); //15분동안 유지
+        authCookie.setMaxAge(60*30); //30분동안 유지
         authCookie.setPath("/");
         response.addCookie(authCookie);
 
@@ -120,7 +137,7 @@ public class UserController {
     @GetMapping("/sendMail/{email}")
     @ResponseBody
     public ResponseEntity<JSONObject> sendmailFunc(@PathVariable("email") String email){
-        log.info("GET /user/sendMail.." + email);
+        UserController.log.info("GET /user/sendMail.." + email);
         //넣을 값 지정
         String code = EmailAuthProperties.planText;
 
@@ -139,17 +156,19 @@ public class UserController {
 
     @GetMapping("/emailConfirm")
     public @ResponseBody JSONObject emailConfirmFunc(String emailCode){
-        log.info("GET /user/emailConfirm... code : " + emailCode);
+        UserController.log.info("GET /user/emailConfirm... code : " + emailCode);
 
         boolean isAuth= passwordEncoder.matches(EmailAuthProperties.planText,emailCode);
         JSONObject obj = new JSONObject();
 
         if(isAuth) {
             obj.put("success",true);
+            obj.put("message","이메일 인증을 성공하셨습니다.");
             return obj;
         }
 
         obj.put("success",false);
+        obj.put("message","이메일 인증을 실패했습니다.");
         return obj;
 
 

@@ -34,13 +34,14 @@
                         <h3>회원가입</h3>
                     </div>
                     <div class="body">
-                        <form  class="joinform"  name="joinform" action="/user/join" method="post" onsubmit="return false">
+                        <form  class="joinform"  name="joinform" action="/user/join" method="post" >
                             <div class="mt-2 mb-2">
-                                <label>이메일계정</label>&nbsp;&nbsp;<span th:text="${username}" style="font-size:0.7rem;color:orange;" class="username_msg"></span>
+                                <label>이메일계정</label>&nbsp;&nbsp;<span th:text="${username}" style="font-size:0.7rem;" class="username_msg"></span>
 
                                 <div style="display:flex;">
                                     <input name="username" class="form-control username"  placeholder="이메일 계정 입력" type="email" required>
-                                    <button type="button" onclick="emailAuthFunc()" class="btn btn-secondary email_auth_btn" data-bs-toggle="modal" data-bs-target="#exampleModal"  style="width:80px;margin-left:5px;">
+                                    <!-- data-bs-target="#exampleModal"       -->
+                                    <button type="button" onclick="emailAuthFunc()" class="btn btn-secondary email_auth_btn" data-bs-toggle="modal"   data-bs-target="#exampleModal"  style="width:80px;margin-left:5px;">
                                         인증
                                     </button>
                                 </div>
@@ -75,8 +76,7 @@
                                 <input name="addr2" class="form-control" placeholder="상세주소 입력">
                             </div>
                             <div class="mb-2">
-                                <button on
-                                        click=isValid() class="btn btn-success w-100 join_btn">회원가입</button>
+                                <button class="btn btn-success w-100 join_btn">회원가입</button>
                             </div>
 
                             <div class="mb-2">
@@ -150,7 +150,6 @@
             axios.get('/user/sendMail/' + email)
                 .then(res=>{
                     console.log(res);
-
                 })
                 .catch(err=>{
                     console.log(err);
@@ -174,16 +173,27 @@
             alert('인증코드를 올바르게 입력하세요');
             return ;
         }
-       //emailForm.submit();
+//       emailForm.submit();
+
+
+
 
        axios.get('/user/emailConfirm?emailCode='+emailCode)
        .then(res =>{
             console.log(res);
             if(res.data.success){
                     //인증완료 -> 다음 입력을 할 준비~
+                    document.querySelector('.username_msg').style.color='green';
             }else{
                     //인증X -> 인증이 안된 내용을 표시
+                    document.querySelector('.username_msg').style.color='orange';
             }
+            document.querySelector('.username_msg').innerHTML=res.data.message;
+            // 모달창 비활성화..
+            document.querySelector('#exampleModal').classList.remove('show');
+            document.querySelector('#exampleModal').classList.add('hide');
+            document.querySelector('.modal-backdrop').remove();
+
 
        })
        .catch(err=>{console.log(err);});
