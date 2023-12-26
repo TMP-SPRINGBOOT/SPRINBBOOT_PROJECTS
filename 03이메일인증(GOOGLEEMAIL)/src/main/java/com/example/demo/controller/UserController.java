@@ -137,5 +137,22 @@ public class UserController {
         return new ResponseEntity(new JSONObject().put("success", true) , HttpStatus.OK);
     }
 
+    @GetMapping("/emailConfirm")
+    public @ResponseBody JSONObject emailConfirmFunc(String emailCode){
+        log.info("GET /user/emailConfirm... code : " + emailCode);
+
+        boolean isAuth= passwordEncoder.matches(EmailAuthProperties.planText,emailCode);
+        JSONObject obj = new JSONObject();
+
+        if(isAuth) {
+            obj.put("success",true);
+            return obj;
+        }
+
+        obj.put("success",false);
+        return obj;
+
+
+    }
 
 }
