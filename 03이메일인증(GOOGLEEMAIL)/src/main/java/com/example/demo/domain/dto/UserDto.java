@@ -19,8 +19,13 @@ public class UserDto {
     @NotBlank(message="username을 입력하세요")
     private String username;
     @NotBlank(message="password 입력하세요")
-    @Pattern(regexp="^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$",message="하나 이상의 대문자,소문자,숫자 및 특수 문자를 입력하세요." )
+    @Pattern(regexp="^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{8,16}$",message="'숫자','문자','특수문자' 무조건 1개 이상, 비밀번호 '최소 8자에서 최대 16자'까지 허용됩니다" )
     private String password;
+
+
+    //'숫자', '문자', '특수문자' 무조건 1개 이상, 비밀번호 '최소 8자에서 최대 16자'까지 허용
+    //(특수문자는 정의된 특수문자만 사용 가능)
+    //
 
     @NotBlank(message="repassword 입력하세요")
     private String repassword;
