@@ -22,8 +22,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -42,6 +44,16 @@ public class UserController {
 
     @Autowired
     private JavaMailSender javaMailSender;
+
+
+    @InitBinder
+    public void dataBinder(WebDataBinder dataBinder){
+        log.info("databinder obj : " + dataBinder);
+        //dataBinder.registerCustomEditor(String.class,new PhoneNumberEditor());
+        dataBinder.registerCustomEditor(String.class,"phone" ,new PhoneNumberEditor());
+    }
+
+
 
     @GetMapping(value = "/myinfo" )
     public void user(Authentication authentication , Model model){
@@ -125,15 +137,12 @@ public class UserController {
         authCookie.setPath("/");
         response.addCookie(authCookie);
 
-
         JSONObject obj = new JSONObject();
         obj.put("success",true);
 
         return  new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
 
-
     }
-
     @GetMapping("/sendMail/{email}")
     @ResponseBody
     public ResponseEntity<JSONObject> sendmailFunc(@PathVariable("email") String email){
@@ -171,7 +180,22 @@ public class UserController {
         obj.put("message","이메일 인증을 실패했습니다.");
         return obj;
 
-
     }
-
 }
+
+
+
+class PhoneNumberEditor extends PropertyEditorSupport {
+    @Override
+    public String getAsText() {
+        System.out.println("PhoneNumberEditor's setAsText()..text : " + getValue());
+        return (String)getValue();
+    }
+    @Override
+    public void setAsText(String text) throws IllegalArgumentException {
+        System.out.println("PhoneNumberEditor's setAsText()..text : " + text);
+        String formattedText =  text.replaceAll("-","");
+        setValue(formattedText);
+    }
+}
+

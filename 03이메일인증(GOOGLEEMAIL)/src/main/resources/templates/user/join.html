@@ -56,8 +56,11 @@
                             </div>
                             <div class="mb-2">
                                 <label>연락처</label>  <span th:text="${phone}"  style="font-size:0.7rem;color:orange;"></span>
-                                <div>
+                                <div style="display:flex;">
                                     <input name="phone" class="form-control" placeholder="- 제외하고 입력">
+                                    <button type="button" onclick="" class="btn btn-secondary email_auth_btn" data-bs-toggle="modal"   data-bs-target="#exampleModal2"  style="width:80px;margin-left:5px;">
+                                        인증
+                                    </button>
                                 </div>
                             </div>
                             <div class="mb-2">
@@ -117,6 +120,33 @@
                            <button class="btn btn-primary email_auth_btn_2">전송</button>
                        </div>
                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">다시요청</button>
+                    <button type="button" class="btn btn-secondary modal_exit" data-bs-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--PHONE Auth Modal -->
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">문자 코드 입력</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form name="emailForm"  action="" style="display:flex;justify-content:space-between;" onSubmit="return false">
+                        <div style="width:100%;">
+                            <input name="emailCode" class="form-control code">
+                        </div>
+                        <div style="width:80px;margin-left:5px;text-align:right;">
+                            <button class="btn btn-primary email_auth_btn_2">전송</button>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary">다시요청</button>
