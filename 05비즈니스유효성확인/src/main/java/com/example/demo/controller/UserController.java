@@ -172,8 +172,8 @@ public class UserController {
     private JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/emailConfirm")
-    public @ResponseBody JSONObject emailConfirmFunc(String emailCode, HttpServletResponse response ){
-        UserController.log.info("GET /user/emailConfirm... code : " + emailCode);
+    public @ResponseBody JSONObject emailConfirmFunc(String emailCode, String username , HttpServletResponse response ){
+        UserController.log.info("GET /user/emailConfirm... code : " + emailCode + " username " + username);
 
         boolean isAuth= passwordEncoder.matches(EmailAuthProperties.planText,emailCode);
         JSONObject obj = new JSONObject();
@@ -184,8 +184,8 @@ public class UserController {
             
             //JWT Token 에 이메일 인증완료 코드 JWT토큰으로 저장&전달
 //            PrincipalDetails principalDetails =  (PrincipalDetails)authentication.getPrincipal();
-//            principalDetails.setEmailAuth(true);
-            TokenInfo tokenInfo = jwtTokenProvider.generateToken(true);
+
+            TokenInfo tokenInfo = jwtTokenProvider.generateToken("EmailAuth",username,true);
             // 쿠키 생성
             Cookie cookie = new Cookie("EmailAuth", tokenInfo.getAccessToken());
             cookie.setMaxAge(JwtProperties.EXPIRATION_TIME); // 쿠키의 만료시간 설정

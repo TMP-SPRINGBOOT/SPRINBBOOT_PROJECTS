@@ -5,6 +5,7 @@ import com.example.demo.config.auth.jwt.JwtTokenProvider;
 import com.example.demo.domain.dto.UserDto;
 import com.example.demo.domain.entity.User;
 import com.example.demo.domain.repository.UserRepository;
+import com.example.demo.properties.EmailAuthProperties;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,10 +57,16 @@ public class UserService {
         else{
             //EmailAuth Claim Value값 꺼내서 true 확인
             Claims claims = jwtTokenProvider.parseClaims(jwtAccessToken);
-            Boolean isEmailAuth = (Boolean)claims.get("EmailAuth");
+            Boolean isEmailAuth = (Boolean)claims.get(EmailAuthProperties.EMAIL_JWT_COOKIE_NAME);
+            String id = (String)claims.get("id");
             if(isEmailAuth==null && isEmailAuth!=true){
                 //이메일인증실패!!
-                model.addAttribute("username","이메일 인증이 필요합니다.");
+                model.addAttribute("username","해당 계정의 이메일 인증이 되어있지 않습니다.");
+                return false;
+            }
+            if(!id.equals(dto.getUsername())){
+                System.out.println("!!!!!!!!!!!!!!");
+                model.addAttribute("username","해당 이메일 재인증이 필요합니다.");
                 return false;
             }
 

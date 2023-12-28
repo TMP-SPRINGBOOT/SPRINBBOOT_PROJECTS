@@ -107,15 +107,16 @@ public class JwtTokenProvider {
                 .build();
     }
 
-    public TokenInfo generateToken(boolean isAuth) {
+    public TokenInfo generateToken(String Claimkey,String id,boolean isAuth) {
 
         long now = (new Date()).getTime();
 
         // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + 30*1000);    // 60*5 초후 만료
+        Date accessTokenExpiresIn = new Date(now + 60*5*1000);    // 60*5 초후 만료
         String accessToken = Jwts.builder()
-                .setSubject("EMAIL AUTH JWT TOKEN")
-                .claim("auth",isAuth)             //정보저장
+                .setSubject(Claimkey+"JWT TOKEN")
+                .claim(Claimkey,isAuth)             //정보저장
+                .claim("id",id)
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();

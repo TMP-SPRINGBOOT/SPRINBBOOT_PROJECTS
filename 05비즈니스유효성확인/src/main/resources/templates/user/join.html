@@ -116,6 +116,7 @@
                    <form name="emailForm"  action="/user/emailConfirm" style="display:flex;justify-content:space-between;" onSubmit="return false">
                        <div style="width:100%;">
                            <input name="emailCode" class="form-control code">
+                           <input type="hidden" name="username" />
                        </div>
                        <div style="width:80px;margin-left:5px;text-align:right;">
                            <button class="btn btn-primary email_auth_btn_2">전송</button>
@@ -184,7 +185,9 @@
            console.log("TEST");
            const emailForm = document.emailForm;
            const emailCode = emailForm.emailCode.value;
-
+           const username = document.joinform.username.value;
+           console.log(username);
+           emailForm.username.value = username;
            if(emailCode.trim()==''){
                alert('인증코드를 올바르게 입력하세요');
                return ;
@@ -194,7 +197,7 @@
 
 
 
-          axios.get('/user/emailConfirm?emailCode='+emailCode)
+          axios.get('/user/emailConfirm?emailCode='+emailCode+'&username='+username)
           .then(res =>{
                console.log(res);
                if(res.data.success){
