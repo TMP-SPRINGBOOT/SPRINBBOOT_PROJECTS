@@ -40,6 +40,15 @@ public class UserService {
                 model.addAttribute("password","패스워드 입력이 상이합니다 다시 입력하세요");
                 return false;
         }
+
+        //동일 계정이 있는지 여부 확인
+        if(userRepository.existsById(dto.getUsername())){
+            model.addAttribute("username","동일한 계정명이 존재합니다.");
+            return false;
+        }
+
+
+
         //이메일인증이 되었는지 확인(JWT EmailAuth쿠키 true확인)
         Cookie[] cookies =  request.getCookies();
         String jwtAccessToken = Arrays.stream(cookies).filter(co -> co.getName().equals("EmailAuth")).findFirst()
