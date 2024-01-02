@@ -12,7 +12,7 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 @Configuration
 public class MultipartConfig {
     //  2.x버전
-    //    @Bean
+//        @Bean
 //    public MultipartResolver multipartResolver() {
 //        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
 //        multipartResolver.setMaxUploadSize(1024*1024*200); 			// 20MB	//전체 업로드 허용 사이즈
@@ -26,13 +26,17 @@ public class MultipartConfig {
     public MultipartResolver multipartResolver() {
         StandardServletMultipartResolver multipartResolver = new StandardServletMultipartResolver();
         return multipartResolver;
+
     }
 
     @Bean
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
-        factory.setMaxRequestSize(DataSize.ofBytes(1024*1024*20));
-        factory.setMaxFileSize(DataSize.ofBytes(1024*1024*20));
+        factory.setMaxRequestSize(DataSize.ofBytes(1024*1024*20)); // 전체 Request최대 사이즈 20Mb
+        factory.setMaxFileSize(DataSize.ofBytes(1024*1024*20)); //1개파일당 최대 사이즈 20Mb
         return factory.createMultipartConfig();
     }
+
+
+
 }
