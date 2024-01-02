@@ -68,6 +68,9 @@ dependencies {
 	//VALIDATOR
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+	//FILE UPLOAD
+	implementation 'commons-fileupload:commons-fileupload:1.5'
+
 	//TEST
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'

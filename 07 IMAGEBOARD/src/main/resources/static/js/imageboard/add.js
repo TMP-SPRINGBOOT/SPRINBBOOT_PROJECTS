@@ -28,24 +28,42 @@
 		uploadBox_el.addEventListener('drop',function(e){
 			e.preventDefault();
 			console.log("drop...");
-			console.log(e);
-			console.log(e.dataTransfer);
+//			console.log(e);
+//			console.log(e.dataTransfer);
 			console.log(e.dataTransfer.files[0]);
 
-            const file = e.dataTransfer.files[0];
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload=function(e){
-                const preview = document.querySelector('#preview');
-                const imgEl =  document.createElement('img');
-                console.log("reader.onload",e)
-                imgEl.setAttribute('src',e.target.result);
-                preview.appendChild(imgEl);
+
+//            const file = e.dataTransfer.files[0];
+
+            //유효성 체크 filter , map
+            const imgFiles= Array.from(e.dataTransfer.files).filter(f=> f.type.startsWith('image/'));
+            if(imgFiles.length===0){
+                alert("이미지 파일만 가능합니다.")
+                return false;
             }
+            //이미지의 개수 5개 제한
+            //이미지 하나당 사이즈 제한..
+            imgFiles.forEach(file=>{
+                if(file.size>(1024*1024*5)){
+                    alert("파일하나당 최대 사이즈는 5Mb이하여야 합니다..")
+                    return false;
+                }
+            })
 
 
-            formData.append('files',file);
-            console.log("formData",formData);
+            for(var file of imgFiles ){
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload=function(e){
+                    const preview = document.querySelector('#preview');
+                    const imgEl =  document.createElement('img');
+    //                console.log("reader.onload",e)
+                    imgEl.setAttribute('src',e.target.result);
+                    preview.appendChild(imgEl);
+                }
+                formData.append('files',file);
+                console.log("formData",formData);
+            }
 
 		});
 
@@ -60,6 +78,18 @@
             const amount = document.imageform.amount.value;
             const size = document.imageform.size.value;
 
+            formData.append('seller',seller);
+            formData.append('productname',productname);
+            formData.append('category',category);
+            formData.append('brandname',brandname);
+            formData.append('itemdetals',itemdetals);
+            formData.append('amount',amount);
+            formData.append('size',size);
+
+
+            axios.post('/imageboard/add',formData,{ headers: {'Content-Type' :'multipart/form-data' } } )
+            .then(res=>{console.log(res);})
+            .catch(err=>{console.log(err);})
 
 
 		})
