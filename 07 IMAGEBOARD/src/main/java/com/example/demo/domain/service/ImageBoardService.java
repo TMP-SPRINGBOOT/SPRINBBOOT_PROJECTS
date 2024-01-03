@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -61,6 +64,15 @@ public class ImageBoardService {
 
             file.transferTo(fileobj);   //저장
 
+            //섬네일 생성
+            File thumbnailFile = new File(dir,"s_"+file.getOriginalFilename());
+            BufferedImage bo_image =  ImageIO.read(fileobj);
+            BufferedImage bt_image = new BufferedImage(250,250,BufferedImage.TYPE_3BYTE_BGR);
+            Graphics2D graphic =bt_image.createGraphics();
+            graphic.drawImage(bo_image,0,0,250,250,null);
+            ImageIO.write(bt_image,"jpg",thumbnailFile);
+
+            //DB에 파일경로 저장
             files.add(fileobj.getPath());
         }
 
