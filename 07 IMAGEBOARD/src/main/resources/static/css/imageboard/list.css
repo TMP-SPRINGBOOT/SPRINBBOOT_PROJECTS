@@ -38,6 +38,7 @@ main>section.row>items>.card>.card-body{}
 main>section.row>items>.card>.card-body>*{
     margin-bottom : 5px;
 }
+
 /*rating */
 .starpoint_wrap{display:inline-block;}
 .starpoint_box
@@ -45,8 +46,10 @@ main>section.row>items>.card>.card-body>*{
 position:relative;
 background:url('/images/sp_star.png') 0 0 no-repeat;font-size:0;
 }
-.starpoint_box .starpoint_bg{
+.starpoint_box .starpoint_bg
+{
 display:block;position:absolute;top:0;left:0;height:18px;
+
 background:url('/images/sp_star.png') 0 -20px no-repeat;pointer-events:none;}
 .starpoint_box .label_star{
 display:inline-block;width:10px;height:18px;box-sizing:border-box;
@@ -77,6 +80,7 @@ opacity:0;width:0;height:0;position:absolute;}
 .blind{position:absolute;clip:rect(0 0 0 0);margin:-1px;width:1px;height: 1px;overflow:hidden;}
 
 /* */
+
 .starpoint_wrap{
     display:flex;
     justify-content:left;
