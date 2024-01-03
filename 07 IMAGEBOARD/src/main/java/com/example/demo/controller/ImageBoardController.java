@@ -42,6 +42,11 @@ public class ImageBoardController {
         return new ResponseEntity("fail...", HttpStatus.BAD_GATEWAY);
     }
 
+
+    @GetMapping("/list")
+    public void list(){
+        log.info("GET /imageboard/list");
+    }
 }
 
 
