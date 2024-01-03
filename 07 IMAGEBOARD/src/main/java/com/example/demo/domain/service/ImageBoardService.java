@@ -1,6 +1,7 @@
 package com.example.demo.domain.service;
 
 import com.example.demo.domain.dto.ImageBoardDto;
+import com.example.demo.domain.entity.ImageBoard;
 import com.example.demo.domain.repository.ImageBoardRepository;
 import com.example.demo.properties.UploadInfoProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -21,11 +25,29 @@ public class ImageBoardService {
     @Transactional(rollbackFor = Exception.class)
     public boolean addImageContents(ImageBoardDto dto)throws Exception{
 
+        //Dto->Entity
+        ImageBoard imageBoard = ImageBoard.builder()
+                .seller(dto.getSeller())
+                .productname(dto.getProductname())
+                .brandname(dto.getBrandname())
+                .price(dto.getPrice())
+                .category(dto.getCategory())
+                .amount(dto.getAmount())
+                .size(dto.getSize())
+                .createAt(LocalDateTime.now())
+                .itemdetals(dto.getItemdetals())
+                .build();
+
+        imageBoardRepository.save(imageBoard);
+
+        List<String> files = new ArrayList<>();
+
         //저장 폴더 지정()
-        String uploadPath= UploadInfoProperties.uploadPath+ File.separator+dto.getSeller()+File.separator+dto.getCategory();
+        String uploadPath= UploadInfoProperties.uploadPath+ File.separator+dto.getSeller()+File.separator+dto.getCategory()+File.separator+imageBoard.getId();
         File dir = new File(uploadPath);
         if(!dir.exists())
             dir.mkdirs();
+
 
         for(MultipartFile file : dto.getFiles()){
 
@@ -39,13 +61,14 @@ public class ImageBoardService {
 
             file.transferTo(fileobj);   //저장
 
+            files.add(fileobj.getPath());
         }
 
-        //이미지파일 저장하기
+        imageBoard.setFiles(files);
+        imageBoardRepository.save(imageBoard);
 
-        //이미지Dto DB 저장
-        //1)dto->entity
+        return true;
 
-        return false;
+
     }
 }

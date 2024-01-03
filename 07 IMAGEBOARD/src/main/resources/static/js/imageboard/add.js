@@ -78,6 +78,8 @@
             const amount = document.imageform.amount.value;
             const size = document.imageform.size.value;
 
+            const price = document.imageform.price.value;
+
             formData.append('seller',seller);
             formData.append('productname',productname);
             formData.append('category',category);
@@ -85,10 +87,14 @@
             formData.append('itemdetals',itemdetals);
             formData.append('amount',amount);
             formData.append('size',size);
-
+            formData.append('price',price);
 
             axios.post('/imageboard/add',formData,{ headers: {'Content-Type' :'multipart/form-data' } } )
-            .then(res=>{console.log(res);})
+            .then(res=>{
+                console.log(res);
+                alert("물품 등록을 완료했습니다.")
+                location.href="/imageboard/list";
+            })
             .catch(err=>{console.log(err);})
 
 

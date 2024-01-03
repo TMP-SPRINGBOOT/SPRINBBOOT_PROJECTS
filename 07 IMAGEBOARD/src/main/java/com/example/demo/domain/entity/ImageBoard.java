@@ -23,6 +23,7 @@ public class ImageBoard {
     private String seller;
     private String productname;
     private String category;
+    private String price;
     private String brandname;
     private String itemdetals;
     private String amount;
