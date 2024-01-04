@@ -98,4 +98,10 @@ public class ImageBoardService {
     public List<ImageBoardFileInfo> getAllItems() throws Exception{
         return imageBoardFileInfoRepository.findAll();
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public List<ImageBoardFileInfo> getImageBoardItem(Long id) throws Exception{
+
+        return imageBoardFileInfoRepository.findByImageBoardId(id);
+    }
 }

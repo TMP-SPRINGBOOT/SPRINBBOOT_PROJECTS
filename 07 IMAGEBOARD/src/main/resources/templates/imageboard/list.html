@@ -34,7 +34,7 @@
 
 
                     <div class="image-block">
-                        <a href="javascript:void(0)">
+                        <a th:href="@{/imageboard/read(id=${item.imageBoard.id})}">
                             <img th:src="@{${item.dir}+${item.filename}}" class="card-img-top" alt="...">
                         </a>
                     </div>

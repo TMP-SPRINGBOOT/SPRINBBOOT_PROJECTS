@@ -70,7 +70,10 @@ public class ImageBoardController {
     }
 
     @GetMapping("/read")
-    public void read(){
+    public void read(Long id,Model model) throws Exception {
+        log.info("GET /imageboard/read..id : " + id);
+        List<ImageBoardFileInfo> list =  imageBoardService.getImageBoardItem(id);
+        model.addAttribute("list",list);
 
     }
 
