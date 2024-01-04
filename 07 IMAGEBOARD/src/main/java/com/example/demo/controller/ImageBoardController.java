@@ -55,7 +55,7 @@ public class ImageBoardController {
     public void list(Model model) throws Exception {
         log.info("GET /imageboard/list");
         List<ImageBoardFileInfo> filelist =  imageBoardService.getAllItems();
-        filelist.forEach(item->System.out.println(item));
+//        filelist.forEach(item->System.out.println(item));
         // ImageBoard의 id를 기준으로 중복을 제거하여 Map을 생성합니다.
         Map<Long, ImageBoardFileInfo> uniqueItemsById = filelist.stream()
                 .collect(Collectors.toMap(item -> item.getImageBoard().getId(), Function.identity(), (existing, replacement) -> existing));
@@ -67,6 +67,11 @@ public class ImageBoardController {
 
 
         model.addAttribute("list",uniqueFileList);
+    }
+
+    @GetMapping("/read")
+    public void read(){
+
     }
 
 }
