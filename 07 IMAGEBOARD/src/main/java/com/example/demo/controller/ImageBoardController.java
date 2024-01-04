@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.domain.dto.ImageBoardDto;
 import com.example.demo.domain.entity.ImageBoard;
+import com.example.demo.domain.entity.ImageBoardFileInfo;
 import com.example.demo.domain.service.ImageBoardService;
 import jakarta.mail.Multipart;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -50,8 +54,19 @@ public class ImageBoardController {
     @GetMapping("/list")
     public void list(Model model) throws Exception {
         log.info("GET /imageboard/list");
-        List<ImageBoard> list =  imageBoardService.getAllItems();
-        model.addAttribute("list",list);
+        List<ImageBoardFileInfo> filelist =  imageBoardService.getAllItems();
+        filelist.forEach(item->System.out.println(item));
+        // ImageBoard의 id를 기준으로 중복을 제거하여 Map을 생성합니다.
+        Map<Long, ImageBoardFileInfo> uniqueItemsById = filelist.stream()
+                .collect(Collectors.toMap(item -> item.getImageBoard().getId(), Function.identity(), (existing, replacement) -> existing));
+        // 중복이 제거된 값들을 다시 List로 변환합니다.
+        List<ImageBoardFileInfo> uniqueFileList = uniqueItemsById.values().stream().collect(Collectors.toList());
+
+        // 결과를 출력합니다.
+        uniqueFileList.forEach(item -> System.out.println(item));
+
+
+        model.addAttribute("list",uniqueFileList);
     }
 
 }

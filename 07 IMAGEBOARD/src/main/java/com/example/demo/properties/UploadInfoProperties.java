@@ -1,6 +1,8 @@
 package com.example.demo.properties;
 
-public class UploadInfoProperties {
+import java.io.File;
 
-    public static final String uploadPath="c:\\imageboard";
+public class UploadInfoProperties {
+    public static final String ROOTPATH="c:\\";
+    public static final String UPLOADPATH= File.separator+"imageboard";
 }

@@ -56,7 +56,7 @@ public class ImageBoardService {
         imageBoardRepository.save(imageBoard);
 
         //저장 폴더 지정()
-        String uploadPath= UploadInfoProperties.uploadPath+ File.separator+dto.getSeller()+File.separator+dto.getCategory()+File.separator+imageBoard.getId();
+        String uploadPath= UploadInfoProperties.ROOTPATH+UploadInfoProperties.UPLOADPATH+ File.separator+dto.getSeller()+File.separator+dto.getCategory()+File.separator+imageBoard.getId();
         File dir = new File(uploadPath);
         if(!dir.exists())
             dir.mkdirs();
@@ -85,7 +85,8 @@ public class ImageBoardService {
             //DB에 파일경로 저장
             ImageBoardFileInfo imageBoardFileInfo = new ImageBoardFileInfo();
             imageBoardFileInfo.setImageBoard(imageBoard);
-            imageBoardFileInfo.setDir(dir.getPath());
+            String dirPath= UploadInfoProperties.UPLOADPATH+ File.separator+dto.getSeller()+File.separator+dto.getCategory()+File.separator+imageBoard.getId()+File.separator;
+            imageBoardFileInfo.setDir(dirPath);
             imageBoardFileInfo.setFilename(file.getOriginalFilename());
             imageBoardFileInfoRepository.save(imageBoardFileInfo);
         }
@@ -94,7 +95,7 @@ public class ImageBoardService {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public List<ImageBoard> getAllItems() throws Exception{
-        return imageBoardRepository.findAll();
+    public List<ImageBoardFileInfo> getAllItems() throws Exception{
+        return imageBoardFileInfoRepository.findAll();
     }
 }

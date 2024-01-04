@@ -61,6 +61,7 @@
                     imgEl.setAttribute('src',e.target.result);
                     preview.appendChild(imgEl);
                 }
+
                 formData.append('files',file);
                 console.log("formData",formData);
             }
