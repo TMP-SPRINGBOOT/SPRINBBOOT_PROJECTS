@@ -1,29 +1,3 @@
-        //메일 설정
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-        mailSender.setUsername("jwg135790@gmail.com");
-        mailSender.setPassword("djfucqgdihudefec");
-
-        Properties mailProps = new Properties();
-        mailProps.put("mail.smtp.auth", "true");
-        mailProps.put("mail.smtp.starttls.enable", "true");
-        mailSender.setJavaMailProperties(mailProps);
-
-
-        System.out.println(mailSender);
-        System.out.println(mailSender.getHost());
-        System.out.println(mailSender.getPort());
-
-        //넣을 값 지정
-        String code = (int)((Math.random()*1000000))+"";
-
-        //메일 메시지 만들기
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject("[WEB-Server]임시패스워드 발급");
-        message.setText(code);
-
-
-        //
-        mailSender.send(message);
+    /*<![CDATA[*/
+           var product_id = [[${list.get(0).imageBoard.id}]];
+    /*]]>*/
