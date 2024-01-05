@@ -106,7 +106,20 @@
                         <span style="font-size:0.8rem;">저장용량 x RAM 용량 x 운영체제 : 128GB x 8GB x WIN11 PRO</span>
                     </div>
                 </div>
-
+                <div  class="mb-3"  >
+                    <div>
+                        <label style="font-size:0.8rem;">AMOUNT</label>
+                        <input type="number" min="1" max="10" step="1" name="amount" class="amount form-control" style="width:80px;" />
+                    </div>
+                    <div>
+                        <label style="font-size:0.8rem;">COLOR</label>
+                        <select name="color" class="form-select color" style="width:100px;">
+                            <option value="white">WHITE</option>
+                            <option value="green">GREEN</option>
+                            <option value="black">BLACK</option>
+                        </select>
+                    </div>
+                </div>
 
                 <div  class="mb-3" style="display:flex; justify-content:left;">
                     <button  class="btn btn-primary add_cart_btn me-2" style="width:150px;">장바구니</button>
@@ -130,6 +143,33 @@
 <script src="/js/imageboard/read.js"></script>
 <!-- user/logout.js   -->
 
+<script>
+
+    /*<![CDATA[*/
+          var product_id = [[${list.get(0).imageBoard.id}]];
+   /*]]>*/
+
+
+   const add_cart_btn = document.querySelector('.add_cart_btn');
+   add_cart_btn.addEventListener('click',function(){
+
+        const color = document.querySelector('.color').value;
+        const amount = document.querySelector('.amount').value;
+
+       axios.get('/cart/add?product_id='+product_id+'&color='+color+'&amount='+amount)
+       .then(
+            res=>{
+                console.log(res);
+                if(confirm('장바구니에 물건을 담았습니다. 장바구니로 이동하시겠습니까?'))
+                    location.href='/cart/read';
+                else
+                    alert('쇼핑을 계속합니다');
+            }
+       )
+       .catch(err=>{console.log(err);});
+
+   });
+</script>
 
 </body>
 </html>

@@ -27,41 +27,35 @@
         <section class="cart">
             <!-- aside -->
             <!-- body -->
-            <div class="item">
+            <div class="item" th:each="cart : ${list}">
                 <!-- seller INFO        -->
                 <div class="seller">
                     <div>
-                        <span>미소안경</span>
+                        <span>판매자 계정 : </span><span th:text="${cart.imageBoard.seller}"></span>
                     </div>
 
                 </div>
-                <!--item-->
+
                 <div class="item_body">
                     <div class="image_board_block">
                         <div> <input type="checkbox" class="item_checkbox" /> </div>
-                        <div><img src="https://thumbnail10.coupangcdn.com/thumbnails/remote/230x230ex/image/retail/images/8325905943400802-83c6e1ed-05dc-4391-8c47-1d6fe662dbb1.jpg" ></div>
+                        <div><img th:src="@{${cart.imageBoardFileInfo.dir}+${cart.imageBoardFileInfo.filename}}" ></div>
                         <div>
-                            <div style="font-weight:800;font-size:0.8rem;">유세븐 남여공용 생활방수 DM프루프 운동화</div>
-                            <div><span style="font-weight:600;font-size:0.7rem;">17,000</span> 원</div>
-                            <div style="color:gray;font-size:0.6rem;">미소안경 | 스마트스토어</div>
+                            <div style="font-weight:800;font-size:0.8rem;" th:text="${cart.imageBoard.productname}"></div>
+                            <div><span style="font-weight:600;font-size:0.7rem;" th:text="${cart.imageBoard.price}"></span> 원</div>
+<!--                            <div style="color:gray;font-size:0.6rem;">미소안경 | 스마트스토어</div>-->
                         </div>
                     </div>
                     <div class="order_block">
                         <div>
-                            <div><span>color :</span><span>black</span></div>
-                            <div><span>size :</span><span>275mm</span></div>
-                            <div><span>amount :</span><span>1</span></div>
-                        </div>
-                        <div>
-                            <div><span>color :</span><span>red</span></div>
-                            <div><span>size :</span><span>270mm</span></div>
-                            <div><span>amount :</span><span>1</span></div>
+                            <div><span>amount :</span><span th:text="${cart.amount}"></span></div>
+                            <div><span>color :</span><span th:text="${cart.color}"></span></div>
                         </div>
                     </div>
                     <div class="price_block">
                         <div>
 
-                            <span style="font-size:1.2rem;font-weight:800">80,000</span>원
+                            <span style="font-size:1.2rem;font-weight:800" th:text="${cart.amount} * ${cart.imageBoard.price}"></span> 원
                         </div>
                     </div>
                     <div class="delivery_block">
@@ -75,6 +69,8 @@
                 </div>
                 <!--card item-->
             </div>
+
+
 
 
             <div class="items_footer_block">
