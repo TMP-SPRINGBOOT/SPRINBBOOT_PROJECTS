@@ -18,3 +18,69 @@ cart_delete_btn_els.forEach(el=>{
     })
 })
 
+// 체크박스 요소 참조
+var checkboxEls = document.querySelectorAll(".item_checkbox");
+
+checkboxEls.forEach(checkbox=>{
+    // 체크박스의 상태가 변경될 때 발생하는 이벤트 핸들러
+    checkbox.addEventListener("change", function() {
+            // 체크박스의 체크 상태 확인
+            if (checkbox.checked) {
+                console.log("체크됨");
+                const item_board_block_El =  checkbox.parentNode.parentNode;
+                console.log(item_board_block_El);
+                const price= item_board_block_El.querySelector(".price")
+
+                const item_body_block_El = item_board_block_El.parentNode;
+
+                const amount= item_body_block_El.querySelector(".amount")
+                console.log('amount',amount);
+                console.log('price',price.innerHTML);
+                const totalPriceEl = document.querySelector('.total_price');
+                totalPriceEl.innerHTML=(Number(price.innerHTML) * Number(amount.innerHTML)) +Number(totalPriceEl.innerHTML);
+
+                //배송비
+
+
+               // const delivery_price = document.querySelector('.delivery_price');
+
+                //전체 주문금액
+                const total_delivery_price = document.querySelector('.total_delivery_price');
+                total_delivery_price.innerHTML = Number(totalPriceEl.innerHTML);
+
+                //cart 에 넣기
+                const cart_id =  checkbox.getAttribute('data-cartid');
+
+                cart_list_arr.push(cart_id);
+                console.log(cart_list_arr);
+
+
+            } else {
+                console.log("체크 해제됨");
+                const item_board_block_El =  checkbox.parentNode.parentNode;
+                console.log(item_board_block_El);
+                const price= item_board_block_El.querySelector(".price")
+
+                const item_body_block_El = item_board_block_El.parentNode;
+
+                const amount= item_body_block_El.querySelector(".amount")
+                console.log('amount',amount);
+                console.log('price',price.innerHTML);
+                const totalPriceEl = document.querySelector('.total_price');
+                totalPriceEl.innerHTML=Number(totalPriceEl.innerHTML) - (Number(price.innerHTML) * Number(amount.innerHTML)) ;
+
+
+                //const delivery_price = document.querySelector('.delivery_price');
+                //전체 주문금액
+                const total_delivery_price = document.querySelector('.total_delivery_price');
+                total_delivery_price.innerHTML = Number(total_delivery_price.innerHTML) - (Number(price.innerHTML) * Number(amount.innerHTML));
+
+
+                //카트 뺴기
+                cart_list_arr.pop();
+                console.log(cart_list_arr);
+
+            }
+        });
+
+})

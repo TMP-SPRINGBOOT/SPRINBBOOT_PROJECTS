@@ -69,4 +69,10 @@ public class CartService {
         String username = authentication.getName();
         return  cartRepository.findByUserUsername(username);
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteCart(Long cartId) throws Exception{
+        cartRepository.deleteById(cartId);
+        return true;
+    }
 }
