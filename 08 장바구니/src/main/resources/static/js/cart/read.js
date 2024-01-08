@@ -18,7 +18,11 @@ cart_delete_btn_els.forEach(el=>{
     })
 })
 
+
+
 // 체크박스 요소 참조
+let cart_list_arr = [];
+
 var checkboxEls = document.querySelectorAll(".item_checkbox");
 
 checkboxEls.forEach(checkbox=>{
@@ -84,3 +88,22 @@ checkboxEls.forEach(checkbox=>{
         });
 
 })
+
+
+const req_pay_btn = document.querySelector('.req_pay_btn');
+req_pay_btn.addEventListener('click',function(){
+
+    location.href="/payment/read?id_arr="+cart_list_arr;
+
+})
+
+
+
+
+
+
+
+
+
+
+
