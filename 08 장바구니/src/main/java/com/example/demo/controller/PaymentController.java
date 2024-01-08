@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -24,6 +25,26 @@ public class PaymentController {
         log.info("GET /payment/read");
         for(Long id : id_arr) System.out.println(id);
         List<Cart> list =  cartService.getMyCartItems(id_arr);
+        list.forEach(cart->System.out.println(cart));
         model.addAttribute("list",list);
+
+        int totalPrice = 0;
+        for(Cart cart : list)
+           totalPrice += cart.getAmount() *   Integer.parseInt(cart.getImageBoard().getPrice());
+        model.addAttribute("totalPrice",totalPrice);
+
+        List<Long> cart_id_list =new ArrayList<>();
+        for(Long cart_id : id_arr)
+            cart_id_list.add(cart_id);
+        model.addAttribute("cart_id_list", cart_id_list);
+
     }
 }
+
+
+
+
+
+
+
+

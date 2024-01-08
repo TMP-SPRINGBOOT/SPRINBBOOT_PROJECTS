@@ -51,7 +51,7 @@ public class JwtTokenProvider {
 
                 byte [] keyByte =  rs.getBytes("signature");                 //DB로 서명Key꺼내옴
                 this.key = Keys.hmacShaKeyFor(keyByte);                                    //this.key에 저장
-                System.out.println("[JwtTokenProvider] Key : " + this.key );
+//                .out.println("[JwtTokenProvider] Key : " + this.key );
             }
             else {
                 byte[] keyBytes = KeyGenerator.getKeygen();     //난수키값 가져오기
@@ -60,8 +60,9 @@ public class JwtTokenProvider {
 
                 pstmt.setBytes(1, keyBytes);
                 pstmt.executeUpdate();
-                System.out.println("[JwtTokenProvider] Constructor Key init: " + key);
+//                .out.println("[JwtTokenProvider] Constructor Key init: " + key);
             }
+
 
         }
 
@@ -97,8 +98,8 @@ public class JwtTokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        System.out.println("[JwtTokenProvider] generateToken() accessToken : " + accessToken);
-        System.out.println("[JwtTokenProvider] generateToken() refreshToken : " + refreshToken);
+//        .out.println("[JwtTokenProvider] generateToken() accessToken : " + accessToken);
+//        .out.println("[JwtTokenProvider] generateToken() refreshToken : " + refreshToken);
 
         return TokenInfo.builder()
                 .grantType("Bearer")
@@ -127,8 +128,8 @@ public class JwtTokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        System.out.println("[JwtTokenProvider] generateToken() accessToken : " + accessToken);
-        System.out.println("[JwtTokenProvider] generateToken() refreshToken : " + refreshToken);
+//        .out.println("[JwtTokenProvider] generateToken() accessToken : " + accessToken);
+//        .out.println("[JwtTokenProvider] generateToken() refreshToken : " + refreshToken);
 
         return TokenInfo.builder()
                 .grantType("Bearer")
@@ -157,7 +158,7 @@ public class JwtTokenProvider {
         String username = claims.getSubject(); //username
 
         //JWT Added
-        System.out.println("[JWTTOKENPROVIDER] principalDetails  : " + claims.get("principal"));
+//        .out.println("[JWTTOKENPROVIDER] principalDetails  : " + claims.get("principal"));
 
         String provider =  (String)claims.get("provider");
         String password = (String)claims.get("password");
@@ -172,7 +173,7 @@ public class JwtTokenProvider {
         PrincipalDetails principalDetails = new PrincipalDetails();
         principalDetails.setUserDto(userDto);
         principalDetails.setAccessToken(oauthAccessToken);   //Oauth AccessToken
-        System.out.println("[JWTTOKENPROVIDER] getAuthentication() principalDetails  : " + principalDetails);
+//        .out.println("[JWTTOKENPROVIDER] getAuthentication() principalDetails  : " + principalDetails);
 
 
         //JWT + NO REMEMBERME

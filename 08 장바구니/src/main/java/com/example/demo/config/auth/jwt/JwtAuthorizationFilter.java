@@ -43,7 +43,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     ) throws IOException, ServletException, IOException {
 
 
-        System.out.println("[JWTAUTHORIZATIONFILTER] doFilterInternal...");
+        //System.out.println("[JWTAUTHORIZATIONFILTER] doFilterInternal...");
 
         String token = null;
         String importAuth = null;
@@ -55,12 +55,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             if (request.getRequestURI().equals("/user/join")) {
 
                 Cookie[] cookies = request.getCookies();
-                System.out.println(request.getRequestURI() + " cookies : " + cookies);
+                //System.out.println(request.getRequestURI() + " cookies : " + cookies);
                 if (cookies != null) {
                     importAuth = Arrays.stream(cookies).filter(co -> co.getName().equals("importAuth")).findFirst()
                             .map(co -> co.getValue())
                             .orElse(null);
-                    System.out.println("[JWTAUTHORIZATIONFILTER] GET /user/join importAuth Cookie value : " + importAuth);
+                    //System.out.println("[JWTAUTHORIZATIONFILTER] GET /user/join importAuth Cookie value : " + importAuth);
 
                     if (importAuth == null) {
                         throw  new Exception("/user/join 에 필요한 쿠키가 없습니다..");
@@ -77,7 +77,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 }
             }
         }catch(Exception e){
-            System.out.println("[JWTAUTHORIZATIONFILTER] impoartAuth null Exception...message : " + e.getMessage());
+            //System.out.println("[JWTAUTHORIZATIONFILTER] impoartAuth null Exception...message : " + e.getMessage());
             response.sendRedirect("/login?error=" + URLEncoder.encode(e.getMessage(),"UTF-8"));
             return ;
         }
@@ -104,12 +104,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 if(jwtTokenProvider.validateToken(token)) {
                     Authentication authentication = getUsernamePasswordAuthenticationToken(token);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                    System.out.println("[JWTAUTHORIZATIONFILTER] : " + authentication);
+                    //System.out.println("[JWTAUTHORIZATIONFILTER] : " + authentication);
                 }
             } catch (ExpiredJwtException e)     //토큰만료시 예외처리(쿠키 제거)
             {
 
-                System.out.println("[JWTAUTHORIZATIONFILTER] : ...ExpiredJwtException ...."+e.getMessage());
+                //System.out.println("[JWTAUTHORIZATIONFILTER] : ...ExpiredJwtException ...."+e.getMessage());
 
                 //토큰 만료시 처리(Refresh-token으로 갱신처리는 안함-쿠키에서 제거)
                 Cookie cookie = new Cookie(JwtProperties.COOKIE_NAME, null);
@@ -133,7 +133,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         Authentication authentication = jwtTokenProvider.getAuthentication(token);
         Optional<User> user = memberRepository.findById(authentication.getName()); // 유저를 유저명으로 찾습니다.
-        System.out.println("JwtAuthorizationFilter.getUsernamePasswordAuthenticationToken...authenticationToken : " +authentication );
+        //System.out.println("JwtAuthorizationFilter.getUsernamePasswordAuthenticationToken...authenticationToken : " +authentication );
         if(user!=null)
         {
             return authentication;

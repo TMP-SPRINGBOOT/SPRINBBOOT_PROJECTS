@@ -32,33 +32,33 @@
                     <div>
                         <span style="font-weight:800;font-size:0.9rem;">배송지</span>
                     </div>
-                    <div class="nickname"  >    <span>홍길동</span> </div>
-                    <div class="phone" >   <span> 010-1111-2222</span>   </div>
-                    <div class="address">
-                        <span>대구광역시 달서구 갈밭남로 11 00아파트 100동 1000호</span>
+                    <div>    <span class="nickname" th:text="${list.get(0).user.nickname}"></span> </div>
+                    <div>   <span class="phone" th:text="${list.get(0).user.phone}"> </span>   </div>
+                    <div>
+                        <span  class="address" th:text="${list.get(0).user.addr1}+' '+${list.get(0).user.addr2}"></span>
                     </div>
                 </div>
                 <div class="product_info_block">
-                    <div class="item">
+                    <div class="item" th:each="cart : ${list}">
                         <div class="seller">
                             <div>
-                                <span>판매자 : </span><span>jwg8910@naver.com</span>
+                                <span>판매자 : </span><span th:text="${cart.imageBoard.seller}"></span>
                             </div>
                         </div>
                         <div class="buyer">
                             <div class="image_block">
-                                <img src="https://thumbnail10.coupangcdn.com/thumbnails/remote/230x230ex/image/retail/images/8325905943400802-83c6e1ed-05dc-4391-8c47-1d6fe662dbb1.jpg" />
+                                <img th:src="@{ ${cart.imageBoardFileInfo.dir} + ${cart.imageBoardFileInfo.filename} }" />
                             </div>
                             <div class="item_info">
                                 <div>
-                                    <span>로다주 투브릿지 슬림 남자 뿔테 안경</span>
+                                    <span th:text="${cart.imageBoard.productname}"></span>
                                 </div>
                                 <div>
-                                    <span>White</span>
-                                    <span>XL</span>
+                                    <span>COLOR : </span><span th:text="${cart.color}"></span>
+                                    <span>AMOUNT : </span><span th:text="${cart.amount}"></span>
                                 </div>
                                 <div>
-                                    <span>30000</span>원
+                                    <span th:text="${cart.imageBoard.price} * ${cart.amount}"></span>원
                                 </div>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                             <span>주문금액</span>
                         </div>
                         <div>
-                            <span>100000</span>
+                            <span th:text="${totalPrice}"></span>
                             <span>원</span>
                         </div>
                 </div>
@@ -88,17 +88,17 @@
                     <div class="pay_details_body">
                         <div>
                             <span>주문금액</span>
-                            <span> 100,000</span>
+                            <span> - </span>
                         </div>
                         <div>
                             <div>
-                                <span>상품금액</span> <span> 90000</span><span>원</span>
+                                <span>상품금액</span> <span th:text="${totalPrice}"></span><span>원</span>
                             </div>
                             <div>
-                                <span>배송비</span><span>3000</span><span>원</span>
+                                <span>배송비</span><span> - </span><span>원</span>
                             </div>
                             <div>
-                                <span>쿠폰할인</span><span>0</span><span>원</span>
+                                <span>쿠폰할인</span><span> - </span><span>원</span>
                             </div>
                         </div>
                     </div>
@@ -124,10 +124,12 @@
                         <button class="btn btn-success w-100">신용카드 결제</button>
                     </div>
                     <div>
-                        <button class="btn btn-success w-100">휴대폰 결제</button>
+                        <button class="btn btn-success w-100 pay_phone_btn">휴대폰 결제</button>
                     </div>
                 </div>
             </div>
+
+            <input  class="cart_id_list" type="hidden" th:value="${cart_id_list}" />
         </section>
 
 
@@ -143,9 +145,12 @@
 
 <!-- axios -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- import -->
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+
 <!-- common.js   -->
 <script src="/js/common.js"></script>
-<script src="/js/cart/read.js"></script>
+<script src="/js/payment/read.js"></script>
 
 </body>
 </html>
