@@ -3,12 +3,14 @@ package com.example.demo.controller;
 import com.example.demo.domain.dto.PaymentDto;
 import com.example.demo.domain.entity.Cart;
 import com.example.demo.domain.service.CartService;
+import com.example.demo.domain.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -22,6 +24,9 @@ public class PaymentController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private PaymentService paymentService;
 
     @GetMapping("/read")
     public void read(Long[] id_arr, Model model) throws Exception {
@@ -44,7 +49,7 @@ public class PaymentController {
     }
 
     @GetMapping("/add")
-    public void add(PaymentDto dto) throws UnsupportedEncodingException {
+    public @ResponseBody void add(PaymentDto dto) throws UnsupportedEncodingException {
         dto.setAddress(  URLDecoder.decode(dto.getAddress(),"UTF-8") );
         dto.setName( URLDecoder.decode(dto.getName(),"UTF-8"));
         List<String> n_card_id = new ArrayList<>();
@@ -54,7 +59,17 @@ public class PaymentController {
         dto.setCart_id(n_card_id);
         log.info("GET /payment/add dto "+dto);
 
+        boolean isadded =  paymentService.addPayment(dto);
     }
+
+    @GetMapping("/list")
+    public void list(){
+        log.info("GET /payment/list");
+    }
+
+
+
+
 }
 
 

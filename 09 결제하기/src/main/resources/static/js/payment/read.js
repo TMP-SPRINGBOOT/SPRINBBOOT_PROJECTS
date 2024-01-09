@@ -37,7 +37,10 @@
 
             axios.get("/payment/add",params)
             .then(resp=>{
-                console.log(resp);})
+                    console.log(resp);
+                    alert("결제가 완료되었습니다. 결제 확인페이지로 이동합니다.");
+                    location.href="/payment/list";
+                })
             .catch(err=>{console.log(err);})
 
 
