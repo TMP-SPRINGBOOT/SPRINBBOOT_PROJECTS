@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +44,16 @@ public class PaymentController {
     }
 
     @GetMapping("/add")
-    public void add(PaymentDto dto){
+    public void add(PaymentDto dto) throws UnsupportedEncodingException {
+        dto.setAddress(  URLDecoder.decode(dto.getAddress(),"UTF-8") );
+        dto.setName( URLDecoder.decode(dto.getName(),"UTF-8"));
+        List<String> n_card_id = new ArrayList<>();
+        for(String cart_id : dto.getCart_id()){
+            n_card_id.add( URLDecoder.decode(cart_id,"UTF-8").trim() );
+        }
+        dto.setCart_id(n_card_id);
         log.info("GET /payment/add dto "+dto);
+
     }
 }
 
