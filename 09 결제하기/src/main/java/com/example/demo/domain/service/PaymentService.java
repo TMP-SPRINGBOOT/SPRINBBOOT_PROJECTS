@@ -91,10 +91,12 @@ public class PaymentService {
         paymentRepository.delete(payment);
     }
 
+
     @Transactional(rollbackFor = Exception.class)
+    public List<Payment> getMyPaymentList() throws Exception {
 
-    public List<Payment> getMyPaymentList(String username) throws Exception {
-
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        String username =  authentication.getName();
         return paymentRepository.findByUserUsername(username);
     }
 }

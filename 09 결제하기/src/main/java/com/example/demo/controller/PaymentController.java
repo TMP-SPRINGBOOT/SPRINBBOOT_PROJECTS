@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.domain.dto.PaymentDto;
 import com.example.demo.domain.entity.Cart;
+import com.example.demo.domain.entity.Payment;
 import com.example.demo.domain.service.CartService;
 import com.example.demo.domain.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,14 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/payment")
 public class PaymentController {
+
+    // -----------------------------------------------------------
+    // 결제 조회 관련 내용은 RESTAPI로 요청해야 한다
+    // -----------------------------------------------------------
+    // DOCUMENT : https://developers.portone.io/api/rest-v1/payment
+    // DOCUMENT - AccessToken사용  https://developers.portone.io/docs/ko/api/rest-api-access-token?v=v1#step-03--%ED%86%A0%ED%81%B0-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
+    //
+    // 관리자(결제내역확인) : https://classic-admin.portone.io/
 
     @Autowired
     private CartService cartService;
@@ -63,8 +72,12 @@ public class PaymentController {
     }
 
     @GetMapping("/list")
-    public void list(){
+    public void list(Model model) throws Exception {
         log.info("GET /payment/list");
+        List<Payment> list = paymentService.getMyPaymentList();
+        model.addAttribute("list",list);
+
+
     }
 
 
