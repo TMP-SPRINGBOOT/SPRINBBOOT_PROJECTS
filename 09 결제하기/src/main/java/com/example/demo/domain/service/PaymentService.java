@@ -68,7 +68,7 @@ public class PaymentService {
 
         for(String id : cart_id){
             //
-            Cart cart = cartRepository.findById(Long.parseLong(id)).get();
+            Cart cart = cartRepository.findById(Long.parseLong(id.trim())).get();
             product_id_list.add(cart.getImageBoard().getId()+"");
             //장바구니 에서 제거
             cartRepository.deleteById(Long.parseLong(id));

@@ -5,13 +5,22 @@ import com.example.demo.domain.entity.Cart;
 import com.example.demo.domain.entity.Payment;
 import com.example.demo.domain.service.CartService;
 import com.example.demo.domain.service.PaymentService;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -76,18 +85,100 @@ public class PaymentController {
         log.info("GET /payment/list");
         List<Payment> list = paymentService.getMyPaymentList();
         model.addAttribute("list",list);
+    }
 
+
+
+
+
+    // AccessToken 발급요청
+    @GetMapping("/getAccessToken")
+    public @ResponseBody void getAccessToken(){
+        log.info("GET /payment/getAccessToken....");
+
+        //URL
+        String url = "https://api.iamport.kr/users/getToken";
+
+        //Request Header
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        //Request Body
+        MultiValueMap<String,String> params = new LinkedMultiValueMap<>();
+        params.add("imp_key","1546549255738924");
+        params.add("imp_secret","Zjy29fdoI6cNNwIZYMrDX4dkLCLvf6HFyFbbVCNwlRD5YzHCEQV4onWbydWFVbT1ID1Zw0Kp6POYsvKg");
+
+
+        //Hader+Body
+        HttpEntity< MultiValueMap<String,String>> entity = new HttpEntity(params,headers);
+
+        //요청
+        RestTemplate restTemplate = new RestTemplate();
+
+        //반환값확인
+        ResponseEntity<ImportAccessTokenResponse> resp =  restTemplate.exchange(url, HttpMethod.POST,entity,ImportAccessTokenResponse.class);
+
+        System.out.println(resp);
+        System.out.println(resp.getBody());
+        System.out.println(resp.getBody().getResponse().getAccess_token());
 
     }
 
 
 
 
+    //결제 취소 요청
+    @GetMapping("/cancel/{imp_uid}/{pay_id}")
+    public @ResponseBody void cancel(
+            @PathVariable String imp_uid,
+            @PathVariable String pay_id
+    ){
+        log.info("GET /payment/cancel..");
+
+        //URL
+        String url = "https://api.iamport.kr/payments/cancel";
+
+        //Request Header
+        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Authorization","Bearer ${access-token}");
+        headers.add("Content-Type","application/json");
+
+        //Request Body
+        MultiValueMap<String,String> params = new LinkedMultiValueMap<>();
+        params.add("imp_uid",imp_uid);
+
+        //Hader+Body
+        HttpEntity< MultiValueMap<String,String>> entity = new HttpEntity(params,headers);
+
+        //요청
+        RestTemplate restTemplate = new RestTemplate();
+
+        //반환값확인
+        ResponseEntity<String> resp =  restTemplate.exchange(url, HttpMethod.POST,entity,String.class);
+
+        System.out.println(resp);
+        System.out.println(resp.getBody());
+
+
+    }
+
+
 }
 
 
-
-
+@Data
+class ImportAccessTokenResponse {
+    private float code;
+    private String message;
+    Response response;
+}
+@Data
+class Response {
+    private String access_token;
+    private float now;
+    private float expired_at;
+}
 
 
 
