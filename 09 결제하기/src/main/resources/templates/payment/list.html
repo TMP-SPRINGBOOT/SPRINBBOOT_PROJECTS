@@ -39,7 +39,7 @@
                                 <span  th:text="${dto}"></span>
                             </div>
                             <div style="width:100px;font-size:0.8rem;margin-left:5px;">
-                                <button class="btn btn-secondary"   >결제 취소</button>
+                                <button class="btn btn-secondary" th:pid="${dto.pay_id}" th:uid="${dto.imp_uid}" th:onclick="cancelPayment(this)" >결제 취소</button>
                             </div>
                         </div>
                     </div>

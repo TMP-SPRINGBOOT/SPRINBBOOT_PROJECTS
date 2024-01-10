@@ -92,8 +92,8 @@ public class PaymentController {
 
 
     // AccessToken 발급요청
-    @GetMapping("/getAccessToken")
-    public @ResponseBody void getAccessToken(){
+//    @GetMapping("/getAccessToken")
+    public String getAccessToken(){
         log.info("GET /payment/getAccessToken....");
 
         //URL
@@ -122,7 +122,7 @@ public class PaymentController {
         System.out.println(resp);
         System.out.println(resp.getBody());
         System.out.println(resp.getBody().getResponse().getAccess_token());
-
+        return resp.getBody().getResponse().getAccess_token();
     }
 
 
@@ -135,14 +135,16 @@ public class PaymentController {
             @PathVariable String pay_id
     ){
         log.info("GET /payment/cancel..");
-
+        // access-token 받기
+        String access_token = getAccessToken();
+        
         //URL
         String url = "https://api.iamport.kr/payments/cancel";
 
         //Request Header
         HttpHeaders headers = new HttpHeaders();
-//        headers.add("Authorization","Bearer ${access-token}");
-        headers.add("Content-Type","application/json");
+        headers.add("Authorization","Bearer "+access_token);
+        headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 
         //Request Body
         MultiValueMap<String,String> params = new LinkedMultiValueMap<>();
@@ -157,10 +159,12 @@ public class PaymentController {
         //반환값확인
         ResponseEntity<String> resp =  restTemplate.exchange(url, HttpMethod.POST,entity,String.class);
 
+
+        //DB삭제
+        paymentService.removePayment(pay_id);
+
         System.out.println(resp);
         System.out.println(resp.getBody());
-
-
     }
 
 
